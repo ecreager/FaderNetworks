@@ -7,7 +7,7 @@ import torch
 
 
 N_IMAGES = 202599
-IMG_SIZE = 256
+IMG_SIZE = 64
 IMG_PATH = 'images_%i_%i.pth' % (IMG_SIZE, IMG_SIZE)
 ATTR_PATH = 'attributes.pth'
 
@@ -57,14 +57,14 @@ def preprocess_attributes():
         return
 
     attr_lines = [line.rstrip() for line in open('list_attr_celeba.txt', 'r')]
-    assert len(attr_lines) == N_IMAGES + 2
+    assert len(attr_lines) == N_IMAGES + 1
 
-    attr_keys = attr_lines[1].split()
+    attr_keys = attr_lines[0].split(',')
     attributes = {k: np.zeros(N_IMAGES, dtype=np.bool) for k in attr_keys}
 
-    for i, line in enumerate(attr_lines[2:]):
+    for i, line in enumerate(attr_lines[1:]):
         image_id = i + 1
-        split = line.split()
+        split = line.split(',')
         assert len(split) == 41
         assert split[0] == ('%06i.jpg' % image_id)
         assert all(x in ['-1', '1'] for x in split[1:])
